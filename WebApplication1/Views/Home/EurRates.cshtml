@@ -1,0 +1,18 @@
+﻿
+<h2>EurRates</h2>
+
+@model WebApplication1.Models.ResponseModel
+@{
+    ViewData["Title"] = "EurRates";
+}
+<a>@Model.Base</a>
+<ul>
+
+    @{
+        foreach (var vasr in Model.DeserRates)
+        {
+            <li>@vasr.CurrencyType : @vasr.ExchangeRate</li>
+
+        }
+    }
+</ul>

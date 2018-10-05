@@ -1,0 +1,63 @@
+﻿@model WebApplication1.Models.ResponseModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+<ul>
+    <ul>
+        <li><span style="font-size: 20px">Convert from</span></li>
+        <li><textarea id="from"></textarea></li>
+        <li><span style="font-size: 20px">Convert to</span></li>
+        <li><textarea id="to"></textarea></li>
+        <li><span style="font-size: 20px">Convert amount</span></li>
+        <li><textarea id="amount"></textarea></li>
+        <li><button id="doConvert" onclick="convert();">Convert</button></li>
+        <li><span>Result = </span><span id ="result"></span></li>
+    </ul>
+    
+ 
+
+    <div>
+        <h2>Eur Rates</h2>
+        <ul id="rates"/>
+    </div>
+
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Send an AJAX request
+            $.getJSON("api/Rates")
+                .done(function(data) {
+                    // On success, 'data' contains a list of products.
+                    $.each(data,
+                        function(key, item) {
+                            // Add a list item for the product.
+                            $('<li>', { text: formatItem(item) }).appendTo($('#rates'));
+                        });
+                });
+        });
+
+        function formatItem(item) {
+            return item.currencyType + ': ' + item.exchangeRate;
+        }
+
+        function formatConvert(item) {
+            return 'According to: ' +  item.date + ' Result is: ' + item.result;
+        }
+
+        function convert() {
+            var from = $('#from').val();
+            var to = $('#to').val();
+            var amount = $('#amount').val();
+            var uri = "api/Rates/" + from + '/' + to + '/' + amount;
+            $.getJSON(uri)
+            .done(function (data) {
+                $('#result').text(formatConvert(data));
+            })
+        .fail(function (jqXHR, textStatus, err) {
+            $('#result').text('Error: ' + err);
+        });
+
+        }
+    </script>
+</ul>
