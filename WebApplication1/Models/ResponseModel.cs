@@ -10,12 +10,11 @@ namespace WebApplication1.Models
     [JsonObject]
     public class ResponseModel
     {
-     
-        public bool Success { get; set; }
-       
-        public string TimesStamp { get; set; }
-       
+        public string ResponseError { get; set; }
+
         public string Base { get; set; }
+
+        public string TimesStamp { get; set; }       
        
         public string Date { get; set; }
         

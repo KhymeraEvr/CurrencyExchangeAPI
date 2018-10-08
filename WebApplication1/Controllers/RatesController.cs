@@ -7,11 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Models;
 using WebApplication1.Services;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace WebApplication1.Controllers
 {
-   
+
 
     [Route("api/[controller]")]
     public class RatesController : Controller
@@ -19,34 +17,37 @@ namespace WebApplication1.Controllers
         CurrencyService serv = new CurrencyService();
         // GET: api/<controller>
         [HttpGet]
-        public IEnumerable<CurrencyModel> Get()
+        public async Task<IEnumerable<CurrencyModel>> Get()
         {
-            return serv.GetLatestEurRates().DeserRates;
+            return await serv.GetLatestEurRates();
         }
 
         // GET api/<controller>/5
         [HttpGet("{id}")]
-        public IEnumerable<CurrencyModel> Get(string id)
+        public async Task<IActionResult> Get(string id)
         {
-            return serv.GetLatestRates(id).DeserRates;
+            ResponseModel response = await serv.GetLatestRates(id);
+            return Ok(response.DeserRates);
+        }
+
+        [HttpGet("date/{date}")]
+        public async Task<IEnumerable<CurrencyModel>> GetDateRate(string date)
+        {
+            ResponseModel response = await serv.GetDateRates(date);
+            return response.DeserRates;
+        }
+
+        [HttpGet("select/{id1}/{id2}")]
+        public async Task<IActionResult> GetCertainRates(string id1, string id2)
+        {
+            ResponseModel response = await serv.GetCertainRates(new string[] { id1, id2 });
+            return Ok(response);
         }
 
         [Route("{convertFrom}/{convertTo}/{amount}")]
-        public ConvertModel Convert (string convertFrom, string convertTo, double amount)
+        public async Task<ConvertModel> Convert(string convertFrom, string convertTo, double amount)
         {
-            return serv.ConvertCurrency(convertFrom, convertTo, amount);
-        }
-
-        // PUT api/<controller>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return await serv.ConvertCurrency(convertFrom, convertTo, amount);
         }
     }
 }
