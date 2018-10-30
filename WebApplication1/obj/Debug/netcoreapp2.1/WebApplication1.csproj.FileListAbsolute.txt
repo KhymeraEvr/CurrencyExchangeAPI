@@ -31,3 +31,5 @@ C:\Users\bohdan.khymera\source\repos\WebApplication1\WebApplication1\obj\Debug\n
 C:\Users\bohdan.khymera\source\repos\WebApplication1\WebApplication1\obj\Debug\netcoreapp2.1\WebApplication1.pdb
 C:\Users\bohdan.khymera\source\repos\WebApplication1\WebApplication1\obj\Debug\netcoreapp2.1\WebApplication1.csproj.CopyComplete
 C:\Users\bohdan.khymera\source\repos\WebApplication1\WebApplication1\obj\Debug\netcoreapp2.1\Razor\Views\Home\EurRates.g.cshtml.cs
+C:\Users\bohdan.khymera\source\repos\WebApplication1\WebApplication1\obj\Debug\netcoreapp2.1\Razor\Views\Home\Login.g.cshtml.cs
+C:\Users\bohdan.khymera\source\repos\WebApplication1\WebApplication1\obj\Debug\netcoreapp2.1\Razor\Views\Home\Register.g.cshtml.cs

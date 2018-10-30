@@ -26,6 +26,10 @@ namespace WebApplication1.Migrations
 
                     b.Property<string>("Date");
 
+                    b.Property<string>("From");
+
+                    b.Property<string>("Into");
+
                     b.Property<double>("Result");
 
                     b.HasKey("Id");

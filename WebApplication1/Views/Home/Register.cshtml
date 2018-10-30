@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewData["Title"] = "Register";
+}
+
+
+<div class="regForm">
+    <h3>Register</h3>
+    <label>Input email</label><br />
+    <input type="email" id="emailReg" /> <br /><br />
+    <label>Input Password</label><br />
+    <input type="password" id="passwordReg" /><br /><br />
+    <label>Confirm Password</label><br />
+    <input type="passwordConfirm" id="confirm" /><br /><br />
+    <input type="submit" id="submitRegister" value="Register" />
+    <input type="submit" id="submitLogin" value="Login" />
+</div>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+<script>
+    $('#submitRegister').click(function(e) {
+        e.preventDefault();
+        var registerData = {
+            username: $('#emailReg').val(),
+            password: $('#passwordReg').val(),
+            confirmPassword: $('#confirm').val()
+        }
+
+        $.ajax({
+            type: 'POST',
+            url: 'api/Account/registerToken',
+            data: registerData
+        })
+    })
+
+    $('#submitLogin').click(function(e) {
+        window.location.href = "/home/login"
+    })
+</script>

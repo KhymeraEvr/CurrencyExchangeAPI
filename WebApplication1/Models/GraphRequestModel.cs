@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 
 namespace WebApplication1.Models
 {
-    public class ConvertModel
+    public class GraphRequestModel
     {
-        public int Id { get; set; }
-        public string Date { get; set; }
-        public double Result { get; set; }
+        public List<string> rates { get; set; }
     }
 }

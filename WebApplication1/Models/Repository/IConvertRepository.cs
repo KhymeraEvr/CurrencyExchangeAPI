@@ -7,6 +7,6 @@ namespace WebApplication1.Models.Repository
 {
     public interface IConvertRepository : IRepository<ConvertModel>
     {
-        IEnumerable<ConvertModel> GetDateConversions(string date);
+        Task<IEnumerable<ConvertModel>> GetDateConversions(string date);
     }
 }

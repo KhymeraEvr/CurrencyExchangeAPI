@@ -3,8 +3,55 @@
     ViewData["Title"] = "Home Page";
 }
 
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load('current', { 'packages': ['corechart'] });
 
-<ul style="list-style-type: none">
+    function drawChart(dataRates) {
+        var data = google.visualization.arrayToDataTable(dataRates);
+
+        var options = {           
+            curveType: 'function',
+            legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+    }
+</script>
+
+<div >
+<div id="curve_chart" style="width: 900px; height: 500px; float: left;"></div>
+
+<ul style="list-style-type: none; float: right;margin-top: 100px">
+    <li><span style="font-size: 20px">Base Currency</span></li>
+    <li>
+        <select id="baseCurrency">
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="RUB">RUB</option>
+            <option value="CAD">CAD</option>
+        </select>
+    </li>
+    @*<li><textarea id="baseCurrency"></textarea></li>*@
+    <li><span style="font-size: 20px">Wanted Currency</span></li>
+    @* <li><textarea id="wantedCurrency"></textarea></li>*@
+    <li>
+        <select id="wantedCurrency">
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="RUB">RUB</option>
+            <option value="CAD">CAD</option>
+        </select>
+    </li>
+    <li><span style="font-size: 20px">Start Date</span></li>
+    <li><textarea id="startDate"></textarea></li>
+    <li><button id="draw" onclick="getDrawTable();">Draw</button></li>
+</ul>
+</div>
+
+<ul style="list-style-type: none; margin-top: 500px;">
     <li><span style="font-size: 20px">Convert from</span></li>
     <li><textarea id="from"></textarea></li>
     <li><span style="font-size: 20px">Convert to</span></li>
@@ -36,9 +83,6 @@
     <ul style="list-style-type: none" id="dateRates"></ul>
 </div>
 
-
-
-
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
 <script>
     $(document).ready(function () {
@@ -64,11 +108,30 @@
             });
     }
 
+    function getDrawTable() {
+        var base = $('#baseCurrency').val();
+        var currency = $('#wantedCurrency').val();
+        var date = $('#startDate').val();
+        var uri = "api/Rates/Graph/" + base + '/' + currency + '/' + date;
+        $.getJSON(uri)
+            .done(function(data) {
+                var length = data.dates.length;
+                var arr = [];
+                for (var i=0;i<length;i++) {
+                    arr[i] = [];
+                }
+                arr[0] = ['Date', data.currencyType];
+                for (var i = 1; i < length; i++) {
+                    arr[i][0] = data.dates[i - 1];
+                    arr[i][1] = data.rates[i - 1];
+                }
+                drawChart(arr);
+            });
+    }
+
     function getDateRates() {
         var date = $('#rateDate').val();
         var uri = "api/Rates/Date/" + date;
-        //var table = document.createElement('table');
-        //table.id="#dateRates";
         $('#dateRates').empty();
         $.getJSON(uri)
             .done(function (data) {
