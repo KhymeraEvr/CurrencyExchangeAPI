@@ -29,13 +29,14 @@
         }
         $.ajax({
             type: 'POST',
+            contentType: "application/json",
             url: '/registerToken',
-            data: registerData,
+            data: JSON.stringify(registerData),
             success: function (data) {
-                sessionStorage.setItem(tokenKey, data.access_token);
+                sessionStorage.setItem('tokenKey', data.access_token);
                 console.log(data.access_token);
 
-                var token = sessionStorage.getItem(tokenKey);
+                var token = sessionStorage.getItem('tokenKey');
                 window.location.href = "/home"
             }
         })
