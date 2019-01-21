@@ -13,10 +13,12 @@ namespace WebApplication1.Models.Authentication
 
         [Required(ErrorMessage = "Password required")]
         [DataType(DataType.Password)]
+        [StringLength(50,MinimumLength = 6)]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
         [Compare("Password",ErrorMessage = "Passwords don`t match")]
+        [StringLength(50,MinimumLength = 6)]
         public string ConfirmPassword { get; set; }
     }
 }

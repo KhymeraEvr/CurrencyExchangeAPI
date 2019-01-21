@@ -32,12 +32,20 @@ namespace WebApplication1
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
+            services
+                .AddAuthentication(o =>
+                {
+                    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                 .AddJwtBearer(options =>
                      {
+                   
                          options.RequireHttpsMetadata = false;
                          options.TokenValidationParameters = new TokenValidationParameters
                          {
+                             ValidateAudience = false,
+                             ValidateIssuer = false,
                              ValidateLifetime = true,
                              IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
                              ValidateIssuerSigningKey = true,
@@ -52,6 +60,7 @@ namespace WebApplication1
 
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             var connectionString = @"Server=(localdb)\MSSQLLocalDB;Database=ConversionDB;Trusted_Connection=True";
@@ -87,12 +96,12 @@ namespace WebApplication1
             app.UseCookiePolicy();
 
             AutoMapper.Mapper.Initialize(cfg => { cfg.CreateMap<ResponseModel, RatesModel>(); });
-
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Register}/{id?}");
+                    template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

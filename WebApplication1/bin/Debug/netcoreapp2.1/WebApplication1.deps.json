@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.1",
-    "signature": "0c001f56d961acd989e245b47ae5dd4d05caa72f"
+    "signature": "1fff0509acc238254f9b39b827de14135b160d2e"
   },
   "compilationOptions": {
     "defines": [
@@ -27,7 +27,8 @@
           "AutoMapper": "7.0.1",
           "Microsoft.AspNetCore.App": "2.1.1",
           "Microsoft.NETCore.App": "2.1.0",
-          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.1.1"
+          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.1.1",
+          "vue": "2.5.17"
         },
         "runtime": {
           "WebApplication1.dll": {}
@@ -528,6 +529,7 @@
         }
       },
       "System.ValueTuple/4.5.0": {},
+      "vue/2.5.17": {},
       "Microsoft.AspNet.WebApi.Client/5.2.6": {
         "dependencies": {
           "Newtonsoft.Json": "11.0.2",
@@ -3659,6 +3661,13 @@
       "sha512": "sha512-xZtSZNEHGa+tGsKuP4sh257vxJ/yemShz4EusmomkynMzuEDDjVaErBNewpzEF6swUgbcrSQAX3ELsEp1zCOwA==",
       "path": "system.valuetuple/4.5.0",
       "hashPath": "system.valuetuple.4.5.0.nupkg.sha512"
+    },
+    "vue/2.5.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-QRy3ubvu/jhKfgo3Lt2mPW39oxazgLK/6tdE8rq8PdaNonoCpDpg9FM1Z7CHGuCZlgfUTd11AJ+miS/37wWkGA==",
+      "path": "vue/2.5.17",
+      "hashPath": "vue.2.5.17.nupkg.sha512"
     },
     "Microsoft.AspNet.WebApi.Client/5.2.6": {
       "type": "package",

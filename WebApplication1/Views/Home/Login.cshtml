@@ -2,93 +2,105 @@
 @{
     ViewData["Title"] = "Authorize";
 }
-
-<div class="userInfo" style="display:none;">
-    <p>Welcome <span class="userName"></span></p>
-    <input type="button" value="Log Out" id="logOut" />
-</div>
-<div class="loginForm">
-    <h3>Log In</h3>
-    <label>Input email</label><br />
-    <input type="email" id="emailLogin" /> <br /><br />
-    <label>Input Password</label><br />
-    <input type="password" id="passwordLogin" /><br /><br />
-    <input type="submit" id="submitLogin" value="Login" />
-    <input type="submit" id="submitRegister" value="Register" />
+<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+<link href="~/css/forms.css" rel="stylesheet" />
+<div class="containerForm">
+    <div class="userInfo" style="display:none;">
+        <h4>Welcome   <span class="userName"></span></h4>
+        <h4>Your role is   <span id="userRole"></span></h4>
+        <input type="button" value="Log Out" id="logOut" />
+    </div>
+    <div class="form-group">
+        <h3>Log In</h3>
+        <label>Input email</label><br />
+        <input type="email" class="form-control" id="emailLogin" /> <br /><br />
+        <label>Input Password</label><br />
+        <input type="password" class="form-control" id="passwordLogin" /><br /><br />
+        <input class="btn btn-primary" type="submit" id="submitLogin" value="Login" />
+    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 <script>
-        var tokenKey = "accessToken";
-        $('#submitLogin').click(function (e) {
-            e.preventDefault();
-            var loginData = {
-                grant_type: 'password',
-                username: $('#emailLogin').val(),
-                password: $('#passwordLogin').val()
-            };
+    var tokenKey = "accessToken";
+    $('#submitLogin').click(function (e) {
+        e.preventDefault();
+        var loginData = {
+            Email: $('#emailLogin').val(),
+            Password: $('#passwordLogin').val()
+        };
 
-            $.ajax({
-                type: 'POST',
-                url: '/loginToken',
-                data: loginData
-            }).success(function (data) {
-                $('.userName').text(data.username);
+        var jsonData = JSON.stringify(loginData);
+       
+        $.ajax({
+            type: "POST",
+            url: '/loginToken',
+            contentType: "application/json",
+            data: JSON.stringify(loginData),
+            success: function (inputData){
+                var dats = JSON.parse(inputData);
+                $('.userName').text(dats.username);
+                $('#userRole').text(dats.role);
                 $('.userInfo').css('display', 'block');
                 $('.loginForm').css('display', 'none');
-    
-                //sessionStorage.setItem(tokenKey, data.access_token);
-                //console.log(data.access_token);
-            }).fail(function (data) {
+
+                setCookie("Token", dats.access_token);
+                console.log(dats);
+            },                
+            fail: function (data) {
                 console.log(data);
-            });
-        });
-
-        $('#submitRegister').click(function(e) {
-            window.location.href = "/home/register"
+            }
         })
+    });
 
-        $('#logOut').click(function (e) {
-            e.preventDefault();
-            $('.loginForm').css('display', 'block');
-            $('.userInfo').css('display', 'none');
-            sessionStorage.removeItem(tokenKey);
+    function setCookie(cname, cvalue) {
+        var d = new Date();
+        d.setTime(d.getTime() + (24 * 60 * 60 * 1000));
+        var expires = "expires=" + d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
+
+    $('#logOut').click(function (e) {
+        e.preventDefault();
+        $('.loginForm').css('display', 'block');
+        $('.userInfo').css('display', 'none');
+        sessionStorage.removeItem(tokenKey);
+    });
+
+    $('#getDataByLogin').click(function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'GET',
+            url: '/api/values/getlogin',
+            beforeSend: function (xhr) {
+
+                var token = sessionStorage.getItem(tokenKey);
+                xhr.setRequestHeader("Authorization", "Bearer " + token);
+            },
+            success: function (data) {
+                alert(data);
+            },
+            fail: function (data) {
+                console.log(data);
+            }
         });
+    });
+    $('#getDataByRole').click(function (e) {
+        e.preventDefault();
+        $.ajax({
+            type: 'GET',
+            url: '/api/values/getrole',
+            beforeSend: function (xhr) {
 
-        $('#getDataByLogin').click(function (e) {
-            e.preventDefault();
-            $.ajax({
-                type: 'GET',
-                url: '/api/values/getlogin',
-                beforeSend: function (xhr) {
-
-                    var token = sessionStorage.getItem(tokenKey);
-                    xhr.setRequestHeader("Authorization", "Bearer " + token);
-                },
-                success: function (data) {
-                    alert(data);
-                },
-                fail: function (data) {
-                    console.log(data);
-                }
-            });
+                var token = sessionStorage.getItem(tokenKey);
+                xhr.setRequestHeader("Authorization", "Bearer " + token);
+            },
+            success: function (data) {
+                alert(data);
+            },
+            fail: function (data) {
+                console.log(data);
+            }
         });
-        $('#getDataByRole').click(function (e) {
-            e.preventDefault();
-            $.ajax({
-                type: 'GET',
-                url: '/api/values/getrole',
-                beforeSend: function (xhr) {
-
-                    var token = sessionStorage.getItem(tokenKey);
-                    xhr.setRequestHeader("Authorization", "Bearer " + token);
-                },
-                success: function (data) {
-                    alert(data);
-                },
-                fail: function (data) {
-                    console.log(data);
-                }
-            });
-        });
+    });
 </script>

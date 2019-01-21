@@ -1,0 +1,14 @@
+{
+  "ProjectFilePath": "c:\\Users\\bohdan.khymera\\source\\repos\\WebApplication1\\UnitTestProject1\\UnitTestProject1.csproj",
+  "TargetFramework": "netcoreapp2.1",
+  "TagHelpers": [],
+  "Configuration": {
+    "ConfigurationName": "UnsupportedRazor",
+    "LanguageVersion": "1.0",
+    "Extensions": [
+      {
+        "ExtensionName": "UnsupportedRazorExtension"
+      }
+    ]
+  }
+}

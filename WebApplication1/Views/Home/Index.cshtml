@@ -2,43 +2,44 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-
+<link href="~/css/forms.css" rel="stylesheet" />
+<link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
     google.charts.load('current', { 'packages': ['corechart'] });
 
     function drawChart(dataRates) {
         var data = google.visualization.arrayToDataTable(dataRates);
-
-        var options = {           
+        var options = {
             curveType: 'function',
             legend: { position: 'bottom' }
         };
 
         var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-
+        document.getElementById('curve_chart').style.display = "block";
         chart.draw(data, options);
     }
 </script>
+<div id="curve_chart" style="width: 700px; float:right; height: 500px; display:none;
+ position: relative;"></div>
 
-<div >
-<div id="curve_chart" style="width: 900px; height: 500px; float: left;"></div>
 
-<ul style="list-style-type: none; float: right;margin-top: 100px">
-    <li><span style="font-size: 20px">Base Currency</span></li>
-    <li>
-        <select id="baseCurrency">
+
+<ul style="list-style-type: none; float: left; margin-top: 100px">
+    <div class="input-group mb-3">
+        <span style="font-size: 20px">Base Currency</span>
+        <select class="form-control" id="inputGroupSelect01">
             <option value="USD">USD</option>
             <option value="EUR">EUR</option>
             <option value="RUB">RUB</option>
             <option value="CAD">CAD</option>
         </select>
-    </li>
-    @*<li><textarea id="baseCurrency"></textarea></li>*@
+    </div>
+    @*<li><textarea id="inputGroupSelect01"></textarea></li>*@
     <li><span style="font-size: 20px">Wanted Currency</span></li>
     @* <li><textarea id="wantedCurrency"></textarea></li>*@
     <li>
-        <select id="wantedCurrency">
+        <select class="form-control" id="wantedCurrency">
             <option value="USD">USD</option>
             <option value="EUR">EUR</option>
             <option value="RUB">RUB</option>
@@ -46,44 +47,46 @@
         </select>
     </li>
     <li><span style="font-size: 20px">Start Date</span></li>
-    <li><textarea id="startDate"></textarea></li>
-    <li><button id="draw" onclick="getDrawTable();">Draw</button></li>
+    <li><textarea class="form-control" id="startDate"></textarea></li>
+    <li><button class="btn btn-primary" id="draw" onclick="getDrawTable();">Draw</button></li>
 </ul>
 </div>
 
-<ul style="list-style-type: none; margin-top: 500px;">
-    <li><span style="font-size: 20px">Convert from</span></li>
-    <li><textarea id="from"></textarea></li>
-    <li><span style="font-size: 20px">Convert to</span></li>
-    <li><textarea id="to"></textarea></li>
-    <li><span style="font-size: 20px">Convert amount</span></li>
-    <li><textarea id="amount"></textarea></li>
-    <li><button id="doConvert" onclick="convert();">Convert</button></li>
-    <li><span>Result = </span><span id="result"></span></li>
-</ul>
+<div class="container body-content">
+    <div style="containerForm">
+        <span style="font-size: 20px">Convert from</span>
+        <textarea class="form-control" id="from"></textarea>
+        <span style="font-size: 20px">Convert to</span>
+        <textarea class="form-control" id="to"></textarea>
+        <span style="font-size: 20px">Convert amount</span>
+        <textarea class="form-control" id="amount"></textarea>
+        <button class="btn btn-primary" id="doConvert" onclick="convert()">Convert</button>
+        <span>Result = </span><span id="result"></span>
+    </div>
+
+    <div>
+        <h2>EUR Rates</h2>
+        <ul style="list-style-type: none" id="rates" />
+    </div>
+
+    <div>
+        <h2>Any Rates</h2>
+        <textarea class="form-control" id="rateType"></textarea>
+        <button class="btn btn-primary" onclick="getAnyRate()">Get</button>
+        <ul style="list-style-type: none" id="anyRates" />
+    </div>
+
+    <div>
+        <h2>Get EUR rates from date</h2>
+        <textarea class="form-control" id="rateDate"></textarea>
+        <button class="btn btn-primary" onclick="getDateRates()">Get</button>
+        <ul style="list-style-type: none" id="dateRates"></ul>
+    </div>
 
 
-<div>
-    <h2>EUR Rates</h2>
-    <ul style="list-style-type: none" id="rates" />
 </div>
-
-<div>
-    <h2>Any Rates</h2>
-    <textarea id="rateType"></textarea>
-    <button onclick="getAnyRate()">Get</button>
-    <ul style="list-style-type: none" id="anyRates" />
-</div>
-
-
-<div>
-    <h2>Get EUR rates from date</h2>
-    <textarea id="rateDate"></textarea>
-    <button onclick="getDateRates()">Get</button>
-    <ul style="list-style-type: none" id="dateRates"></ul>
-</div>
-
 <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
 <script>
     $(document).ready(function () {
         $.getJSON("api/Rates")
@@ -100,24 +103,24 @@
         var uri = "api/Rates/" + rateType;
         $("#anyRates").empty();
         $.getJSON(uri)
-            .done(function (data) {
-                $.each(data,
-                    function (key, item) {
-                        $('<li>', { text: formatItem(item) }).appendTo($('#anyRates'));
-                    });
-            });
+        .done(function (data) {
+            $.each(data,
+                function (key, item) {
+                    $('<li>', { text: formatItem(item) }).appendTo($('#anyRates'));
+                });
+        });
     }
 
     function getDrawTable() {
-        var base = $('#baseCurrency').val();
+        var base = $('#inputGroupSelect01').val();
         var currency = $('#wantedCurrency').val();
         var date = $('#startDate').val();
         var uri = "api/Rates/Graph/" + base + '/' + currency + '/' + date;
         $.getJSON(uri)
-            .done(function(data) {
+            .done(function (data) {
                 var length = data.dates.length;
                 var arr = [];
-                for (var i=0;i<length;i++) {
+                for (var i = 0; i < length; i++) {
                     arr[i] = [];
                 }
                 arr[0] = ['Date', data.currencyType];
@@ -142,8 +145,6 @@
             });
     }
 
-
-
     function formatItem(item) {
         return item.currencyType + ': ' + item.exchangeRate;
     }
@@ -157,13 +158,35 @@
         var to = $('#to').val();
         var amount = $('#amount').val();
         var uri = "api/Rates/" + from + '/' + to + '/' + amount;
-        $.getJSON(uri)
-            .done(function (data) {
+        $.ajax({
+            type: "GET",
+            url: uri,
+            beforeSend: function (xhr) {
+
+                var token = getCookie("Token");
+                xhr.setRequestHeader("Authorization", "Bearer " + token);
+            },
+            success: function (data) {
                 $('#result').text(formatConvert(data));
-            })
-            .fail(function (jqXHR, textStatus, err) {
+            },
+            fail: function (jqXHR, textStatus, err) {
                 $('#result').text('Error: ' + err);
-            });
+            }
+        })
+        function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
 
     }
 </script>

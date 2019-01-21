@@ -4622,6 +4622,9 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XPath.XDocument.dll": {}
         }
+      },
+      "vue/2.5.17": {
+        "type": "package"
       }
     }
   },
@@ -12265,6 +12268,18 @@
         "system.xml.xpath.xdocument.4.3.0.nupkg.sha512",
         "system.xml.xpath.xdocument.nuspec"
       ]
+    },
+    "vue/2.5.17": {
+      "sha512": "QRy3ubvu/jhKfgo3Lt2mPW39oxazgLK/6tdE8rq8PdaNonoCpDpg9FM1Z7CHGuCZlgfUTd11AJ+miS/37wWkGA==",
+      "type": "package",
+      "path": "vue/2.5.17",
+      "files": [
+        ".signature.p7s",
+        "Content/Scripts/vue.js",
+        "Content/Scripts/vue.min.js",
+        "vue.2.5.17.nupkg.sha512",
+        "vue.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
@@ -12272,7 +12287,8 @@
       "AutoMapper >= 7.0.1",
       "Microsoft.AspNetCore.App >= 2.1.1",
       "Microsoft.NETCore.App >= 2.1.0",
-      "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.1.1"
+      "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.1.1",
+      "vue >= 2.5.17"
     ]
   },
   "packageFolders": {
@@ -12334,6 +12350,10 @@
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",
             "version": "[2.1.1, )"
+          },
+          "vue": {
+            "target": "Package",
+            "version": "[2.5.17, )"
           }
         },
         "imports": [

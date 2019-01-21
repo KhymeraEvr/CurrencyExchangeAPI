@@ -19,52 +19,52 @@ namespace WebApplication1.Controllers
         private readonly IUserService _userService;
         public AccountController(IUserService userService)
         {
-            _userService = userService;        
+            _userService = userService;
         }
 
         [HttpPost("/loginToken")]
-        public async Task<IActionResult> PostToken()
+        public async Task<IActionResult> PostToken([FromBody] LoginModel model)
         {
-            var username = Request.Form["username"];
-            var password = Request.Form["password"];
+            var username = model.Email;
+            var password = model.Password;
 
             var identity = await _userService.GetIdentity(username, password);
             if (identity == null)
             {
                 return BadRequest();
             }
-
-            var now = DateTime.UtcNow;            
-            var jwt = new JwtSecurityToken(
-                    notBefore: now,
-                    claims: identity.Claims,
-                    expires: now.Add(TimeSpan.FromMinutes(AuthOptions.Lifetime)),
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-
-            var response = new
-            {
-                access_token = encodedJwt,
-                username = identity.Name
-            };
-       
             Response.ContentType = "application/json";
-             return  Ok(JsonConvert.SerializeObject(response, new JsonSerializerSettings { Formatting = Formatting.Indented }));
+            return Ok(_userService.GetToken(identity));
         }
 
         [HttpPost]
         [Route("/registerToken")]
-        public async Task<IActionResult> RegisterToken()
+        public async Task<IActionResult> RegisterToken([FromBody] RegisterModel model)
         {
             Console.WriteLine();
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
-           // _userService.UnitOfWork.Users.Add(new User(){Login = model.Email,Password = model.Password,Role = "user"});
-            return Ok();
+            if (! await _userService.UserNameIsAvailable(model.Email)) return BadRequest();
+            string role = "user";
+            if (model.Email.EndsWith("eleks.com"))
+            {
+                role = "admin";
+            }
+            await _userService.UnitOfWork.Add(new User() { Login = model.Email, Password = model.Password, Role = role });
+            
+            var username = model.Email;
+            var password = model.Password;
+            var identity = await _userService.GetIdentity(username, password);
+            if (identity == null)
+            {
+                return BadRequest();
+            }
+            Response.ContentType = "application/json";
+            var token = _userService.GetToken(identity);
+            return Ok(token);
         }
-
 
     }
 }

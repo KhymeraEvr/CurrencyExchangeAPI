@@ -9,8 +9,8 @@ namespace WebApplication1.Models.Authentication
 {
     public class AuthOptions
     {
-        const string Key = "ratesUserKey123";
-        public const int Lifetime = 1; 
+        const string Key = "ratesUserKey123longerkeydamnit";
+        public const int Lifetime = 30; 
         public static SymmetricSecurityKey GetSymmetricSecurityKey()
         {
             return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Key));

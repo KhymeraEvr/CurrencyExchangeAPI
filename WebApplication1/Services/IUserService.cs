@@ -11,5 +11,7 @@ namespace WebApplication1.Services
     {
         IUnitOfWork UnitOfWork { get; set; }
         Task<ClaimsIdentity> GetIdentity(string username, string password);
+        string GetToken(ClaimsIdentity identity);
+        Task<bool> UserNameIsAvailable(string name);
     }
 }

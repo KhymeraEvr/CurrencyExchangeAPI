@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Razor.Language.Extensions;
@@ -56,7 +57,6 @@ namespace WebApplication1.Controllers
             return Ok(result.DeserRates);
         }
 
-
         // GET api/rates/Graph/{baseCur}/{checkCur}/{date}
         //[TimeExecutionFilterAtribute]
         [HttpGet("Graph/{baseCur}/{checkCur}/{date}")]
@@ -100,6 +100,7 @@ namespace WebApplication1.Controllers
         }
 
         // GET api/rates/{convertFrom}/{convertTo}/{amount}
+        [Authorize(Roles = "user,admin")]
         [Route("{convertFrom}/{convertTo}/{amount}")]
         public async Task<IActionResult> Convert(string convertFrom, string convertTo, double amount)
         {
@@ -109,6 +110,7 @@ namespace WebApplication1.Controllers
         }
 
         // POST api/rates/converts
+        [Authorize(Roles = "admin")]
         [HttpPost("converts")]
         public async Task<IActionResult> AddCustomConvert([FromBody] ConvertModel conv)
         {
@@ -117,7 +119,9 @@ namespace WebApplication1.Controllers
             return Ok();
         }
 
+        
         // PUT api/rates/converts/{ID}
+        [Authorize(Roles = "admin")]
         [HttpPut("converts/{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] ConvertModel newItem)
         {
@@ -136,6 +140,7 @@ namespace WebApplication1.Controllers
         }
 
         // PATCH api/rates/converts/{ID}
+        [Authorize(Roles = "admin")]
         [HttpPatch("converts/{id}")]
         public async Task<IActionResult> PartialUpdate(int id, [FromBody] JsonPatchDocument<ConvertModel> patchDoc)
         {
@@ -147,6 +152,7 @@ namespace WebApplication1.Controllers
         }
 
         // DELETE api/rates/{ID}        
+        [Authorize(Roles = "admin")]
         [HttpDelete("converts/{id}")]
         public async Task<IActionResult> DeleteConvert(int id)
         {

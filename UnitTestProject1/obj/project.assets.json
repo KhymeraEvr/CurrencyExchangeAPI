@@ -3067,13 +3067,17 @@
           "lib/netstandard1.3/System.Xml.XPath.XmlDocument.dll": {}
         }
       },
+      "vue/2.5.17": {
+        "type": "package"
+      },
       "WebApplication1/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.1",
         "dependencies": {
           "AutoMapper": "7.0.1",
           "Microsoft.NETCore.App": "2.1.0",
-          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.1.1"
+          "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.1.1",
+          "vue": "2.5.17"
         },
         "compile": {
           "bin/placeholder/WebApplication1.dll": {}
@@ -9280,6 +9284,18 @@
         "ref/xamarinwatchos10/_._",
         "system.xml.xpath.xmldocument.4.0.1.nupkg.sha512",
         "system.xml.xpath.xmldocument.nuspec"
+      ]
+    },
+    "vue/2.5.17": {
+      "sha512": "QRy3ubvu/jhKfgo3Lt2mPW39oxazgLK/6tdE8rq8PdaNonoCpDpg9FM1Z7CHGuCZlgfUTd11AJ+miS/37wWkGA==",
+      "type": "package",
+      "path": "vue/2.5.17",
+      "files": [
+        ".signature.p7s",
+        "Content/Scripts/vue.js",
+        "Content/Scripts/vue.min.js",
+        "vue.2.5.17.nupkg.sha512",
+        "vue.nuspec"
       ]
     },
     "WebApplication1/1.0.0": {
